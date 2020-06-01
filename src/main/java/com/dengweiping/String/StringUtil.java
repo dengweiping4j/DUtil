@@ -1,14 +1,22 @@
 package com.dengweiping.String;
 
+
+import org.apache.log4j.Logger;
+
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
 /**
- *
+ * @description:字符串工具类
+ * @author: DengWeiPing
+ * @time: 2020/6/1 8:47
  */
 public class StringUtil {
 
+    private static Logger logger = Logger.getLogger(StringUtil.class);
+
     /***
-     * MD5加码 生成32位md5码
+     * MD5加密 生成32位md5码
      */
     public static String toMD5(String inStr) {
         MessageDigest md5;
@@ -16,6 +24,7 @@ public class StringUtil {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (Exception e) {
+            logger.error("MD5加密出错：" + e);
             e.printStackTrace();
             return null;
         }
@@ -38,12 +47,25 @@ public class StringUtil {
         return hexValue.toString();
     }
 
+    /**
+     * 字节数组转换为字符串
+     *
+     * @return
+     */
+    public static String byteToStr(byte[] byt) {
+        String strRead = null;
+        try {
+            strRead = new String(byt, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("字节数组转换为字符串时出错：" + e);
+            e.printStackTrace();
+        }
+        return strRead;
+    }
 
     // 测试主函数
     public static void main(String args[]) {
-        String s = "dengweiping";
-        System.out.println("原始：" + s);
-        System.out.println("MD5后：" + toMD5(s));
+        toMD5("dsf");
     }
 
 }
