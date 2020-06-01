@@ -49,7 +49,7 @@ public class ListUtil {
         Collections.sort(list, (Comparator<Object>) (o1, o2) -> {
             try {
                 Field field1 = o1.getClass().getDeclaredField(propertyName);
-                Field field2 = o1.getClass().getDeclaredField(propertyName);
+                Field field2 = o2.getClass().getDeclaredField(propertyName);
                 //打开私有访问
                 field1.setAccessible(true);
                 field2.setAccessible(true);
@@ -74,4 +74,7 @@ public class ListUtil {
         return list;
     }
 
+    public static void main(String[] args) {
+
+    }
 }
