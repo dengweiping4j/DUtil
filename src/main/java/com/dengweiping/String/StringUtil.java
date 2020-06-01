@@ -1,8 +1,6 @@
 package com.dengweiping.String;
 
 
-import org.apache.log4j.Logger;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Random;
@@ -13,8 +11,6 @@ import java.util.Random;
  * @time: 2020/6/1 8:47
  */
 public class StringUtil {
-
-    private static Logger logger = Logger.getLogger(StringUtil.class);
 
     /**
      * MD5加密 生成32位md5码
@@ -28,7 +24,6 @@ public class StringUtil {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (Exception e) {
-            logger.error("MD5加密出错：" + e);
             e.printStackTrace();
             return null;
         }
@@ -113,7 +108,6 @@ public class StringUtil {
         try {
             strRead = new String(bytes, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            logger.error("字节数组转换为字符串时出错：" + e);
             e.printStackTrace();
         }
         return strRead;
