@@ -3,10 +3,7 @@ package com.dengweiping.collection;
 import com.dengweiping.domain.Test;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @description 集合工具类
@@ -28,7 +25,7 @@ public class ListUtil {
     }
 
     /**
-     * 根据指定属性升序排序
+     * 根据指定属性升序排序，忽略大小写
      *
      * @param list         集合
      * @param propertyName 属性名
@@ -88,44 +85,78 @@ public class ListUtil {
                 } else if (obj2 == null) {
                     return 1;
                 }
-                if ("int".equals(type)) {
-                    if ("asc".equals(sortType)) {
-                        //升序
-                        return (int) obj1 - (int) obj2;
-                    } else {
-                        //降序
-                        return (int) obj2 - (int) obj1;
-                    }
-                } else if ("java.lang.String".equals(type)) {
-                    //循环比较次数以字符串短的为准
-                    int length = obj1.toString().length() < obj2.toString().length() ? obj1.toString().length() : obj2.toString().length();
-                    //是否忽略大小写
-                    char[] charArray1 = ignoreCase ? obj1.toString().toLowerCase().toCharArray() : obj1.toString().toCharArray();
-                    char[] charArray2 = ignoreCase ? obj2.toString().toLowerCase().toCharArray() : obj2.toString().toCharArray();
-                    //比较字符串的ASCII码值
-                    if ("asc".equals(sortType)) {
-                        for (int i = 0; i < length; i++) {
-                            if ((byte) charArray1[i] > (byte) charArray2[i]) {
-                                return 1;
-                            } else if ((byte) charArray1[i] < (byte) charArray2[i]) {
-                                return -1;
+                if ("asc".equals(sortType)) {
+                    switch (type) {
+                        case "int":
+                            return (int) obj1 - (int) obj2;
+                        case "long":
+                        case "java.lang.Long":
+                            return (long) obj1 > (long) obj2 ? 1 : -1;
+                        case "double":
+                        case "java.lang.double":
+                            return (double) obj1 > (double) obj2 ? 1 : -1;
+                        case "float":
+                        case "java.lang.Float":
+                            return (float) obj1 > (float) obj2 ? 1 : -1;
+                        case "java.lang.String":
+                            //循环比较次数以字符串短的为准
+                            int length = obj1.toString().length() < obj2.toString().length() ? obj1.toString().length() : obj2.toString().length();
+                            //是否忽略大小写
+                            char[] charArray1 = ignoreCase ? obj1.toString().toLowerCase().toCharArray() : obj1.toString().toCharArray();
+                            char[] charArray2 = ignoreCase ? obj2.toString().toLowerCase().toCharArray() : obj2.toString().toCharArray();
+                            //比较字符串的ASCII码值
+                            for (int i = 0; i < length; i++) {
+                                if ((byte) charArray1[i] > (byte) charArray2[i]) {
+                                    return 1;
+                                } else if ((byte) charArray1[i] < (byte) charArray2[i]) {
+                                    return -1;
+                                }
                             }
-                        }
-                        //若相同长度部分的字符串都相等，则根据字符串长度比较
-                        return charArray1.length - charArray2.length;
-                    } else {
-                        for (int i = 0; i < length; i++) {
-                            if ((byte) charArray1[i] > (byte) charArray2[i]) {
-                                return -1;
-                            } else if ((byte) charArray1[i] < (byte) charArray2[i]) {
-                                return 1;
-                            }
-                        }
-                        //若相同长度部分的字符串都相等，则根据字符串长度比较
-                        return charArray2.length - charArray1.length;
+                            //若相同长度部分的字符串都相等，则根据字符串长度比较
+                            return charArray1.length - charArray2.length;
+                        case "java.util.Date":
+                            Date d1 = (Date) obj1;
+                            Date d2 = (Date) obj2;
+                            return d1.getTime() > d2.getTime() ? 1 : -1;
+                        default:
+                            throw new RuntimeException("暂不支持 " + type + " 类型的属性排序");
                     }
                 } else {
-                    throw new RuntimeException("只支持int和String属性排序");
+                    switch (type) {
+                        case "int":
+                            return (int) obj2 - (int) obj1;
+                        case "long":
+                        case "java.lang.Long":
+                            return (long) obj2 > (long) obj1 ? 1 : -1;
+                        case "double":
+                        case "java.lang.Double":
+                            return (double) obj2 > (double) obj1 ? 1 : -1;
+                        case "float":
+                        case "java.lang.Float":
+                            return (float) obj2 > (float) obj1 ? 1 : -1;
+                        case "java.lang.String":
+                            //循环比较次数以字符串短的为准
+                            int length = obj1.toString().length() < obj2.toString().length() ? obj1.toString().length() : obj2.toString().length();
+                            //是否忽略大小写
+                            char[] charArray1 = ignoreCase ? obj1.toString().toLowerCase().toCharArray() : obj1.toString().toCharArray();
+                            char[] charArray2 = ignoreCase ? obj2.toString().toLowerCase().toCharArray() : obj2.toString().toCharArray();
+                            //比较字符串的ASCII码值
+                            for (int i = 0; i < length; i++) {
+                                if ((byte) charArray1[i] > (byte) charArray2[i]) {
+                                    return -1;
+                                } else if ((byte) charArray1[i] < (byte) charArray2[i]) {
+                                    return 1;
+                                }
+                            }
+                            //若相同长度部分的字符串都相等，则根据字符串长度比较
+                            return charArray2.length - charArray1.length;
+                        case "java.util.Date":
+                            Date d1 = (Date) obj1;
+                            Date d2 = (Date) obj2;
+                            return d2.getTime() > d1.getTime() ? 1 : -1;
+                        default:
+                            throw new RuntimeException("暂不支持 " + type + " 类型的属性排序");
+                    }
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
