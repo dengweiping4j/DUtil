@@ -1,10 +1,9 @@
 package com.dengweiping.collection;
 
+import com.dengweiping.domain.Test;
+
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @description 集合工具类
@@ -131,4 +130,25 @@ public class ListUtil {
         return list;
     }
 
+    public static void main(String[] args) {
+        List<Test> list = new ArrayList<>();
+        Test t1 = new Test();
+        t1.setName("张三");
+        t1.setAge(new Date(1591062536000L));
+        Test t2 = new Test();
+        t2.setName("邓伦");
+        t2.setAge(new Date(1590976136000L));
+        Test t3 = new Test();
+        t3.setName("周大哥");
+        t3.setAge(new Date(1591069736000L));
+        Test t4 = new Test();
+        t4.setName("啊啊啊");
+        t4.setAge(new Date(1591069256000L));
+        list.add(t1);
+        list.add(t2);
+        list.add(t3);
+        list.add(t4);
+        List<Test> newList = sortAscIgnoreCase(list, "age");
+        System.out.println(newList);
+    }
 }
