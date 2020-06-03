@@ -79,7 +79,13 @@ public class FileUtil {
         excelWriter.finish();
     }
 
+    public void noModelRead() {
+        String fileName = "E:\\demo.xlsx";
+        // 这里 只要，然后读取第一个sheet 同步读取会自动finish
+        EasyExcel.read(fileName, new NoModelDataListener()).sheet().doRead();
+    }
+
     public static void main(String[] args) {
-        new FileUtil().simpleFill();
+        new FileUtil().noModelRead();
     }
 }
