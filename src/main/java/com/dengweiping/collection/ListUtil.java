@@ -129,4 +129,57 @@ public class ListUtil {
 
         return list;
     }
+
+    /**
+     * 根据指定对象属性去除重复对象
+     *
+     * @param list         传入的list集合
+     * @param propertyName 指定的去重属性名称
+     */
+    public static <T> List<T> removeRepeat(List<T> list, String propertyName) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        //根据属性值进行去重
+        //方式1 使用匿名内部类
+        Set<T> sets = new TreeSet<T>((o1, o2) -> {
+            try {
+                Field field1 = o1.getClass().getDeclaredField(propertyName);
+                Field field2 = o2.getClass().getDeclaredField(propertyName);
+                field1.setAccessible(true);
+                field2.setAccessible(true);
+                Object obj1 = field1.get(o1);
+                Object obj2 = field2.get(o2);
+                //根据指定属性进行去重
+                return obj1.toString().compareTo(obj2.toString());
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        });
+        sets.addAll(list);
+        return new ArrayList(sets);
+    }
+
+    /**
+     * 根据指定key去除重复Map
+     *
+     * @param list         传入的list集合
+     * @param keyName 指定的key
+     */
+    public static List<Map<String, Object>> removeMapRepeat(List<Map<String, Object>> list, String keyName) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        //根据属性值进行去重
+        //方式1 使用匿名内部类
+        Set<Map<String, Object>> sets = new TreeSet<Map<String, Object>>((m1, m2) -> {
+            Object obj1 = m1.get(keyName);
+            Object obj2 = m2.get(keyName);
+            //根据指定属性进行去重
+            return obj1.toString().compareTo(obj2.toString());
+        });
+        sets.addAll(list);
+        return new ArrayList(sets);
+    }
 }

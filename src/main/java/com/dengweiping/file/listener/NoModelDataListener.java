@@ -1,9 +1,10 @@
-package com.dengweiping.file;
+package com.dengweiping.file.listener;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.exception.ExcelDataConvertException;
 import com.alibaba.excel.metadata.CellExtra;
+import com.dengweiping.file.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
      * 每隔5条存储数据库，实际使用中可以3000条，然后清理list ，方便内存回收
      */
     private static final int BATCH_COUNT = 5;
-    List<Map<Integer, String>> list = new ArrayList<Map<Integer, String>>();
+    List<Map<Integer, String>> list = new ArrayList<>();
 
 
     @Override
@@ -78,6 +79,6 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
      * 加上存储数据库
      */
     private void saveData() {
-        System.out.println(list.size() + "条数据");
+        FileUtil.save(list);
     }
 }

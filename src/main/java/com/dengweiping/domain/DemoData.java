@@ -2,8 +2,6 @@ package com.dengweiping.domain;
 
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @description:
  * @author: DengWeiPing

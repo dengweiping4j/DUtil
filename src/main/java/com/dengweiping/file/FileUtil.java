@@ -6,8 +6,12 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.dengweiping.domain.DemoData;
+import com.dengweiping.file.listener.ModelDataListener;
+import com.dengweiping.file.listener.NoModelDataListener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @description:字符串工具类
@@ -21,18 +25,21 @@ public class FileUtil {
         for (int i = 0; i < 10; i++) {
             DemoData data = new DemoData();
             data.setName("张" + i);
-            data.setNumber(i*3+5);
+            data.setNumber(i * 3 + 5);
             list.add(data);
         }
         return list;
     }
 
-    public void write() {
+    /**
+     * 基本写入
+     */
+    public void write(String sheetName, List<DemoData> data, String fileName) {
         // 写法1
-        String fileName = "E:\\" + System.currentTimeMillis() + ".xlsx";
+        //String fileName = "E:\\" + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
         // 如果这里想使用03 则 传入excelType参数即可
-        EasyExcel.write(fileName, DemoData.class).sheet("模板").doWrite(data());
+        EasyExcel.write(fileName, DemoData.class).sheet(sheetName).doWrite(data);
 
 //        // 写法2
 //        fileName = System.currentTimeMillis() + ".xlsx";
@@ -40,7 +47,7 @@ public class FileUtil {
 //        ExcelWriter excelWriter = EasyExcel.write(fileName, DemoData.class).build();
 //        WriteSheet writeSheet = EasyExcel.writerSheet("模板").build();
 //        excelWriter.write(data(), writeSheet);
-//        // &#x5343;&#x4E07;&#x522B;&#x5FD8;&#x8BB0;finish &#x4F1A;&#x5E2E;&#x5FD9;&#x5173;&#x95ED;&#x6D41;
+//        //这里千万别忘记关闭，读的时候会创建临时文件，到时磁盘会崩的
 //        excelWriter.finish();
     }
 
@@ -56,10 +63,10 @@ public class FileUtil {
         // 写法1：
         String fileName = "E:\\demo.xlsx";
         // 这里 需要指定读用哪个class去读，然后读取第一个sheet 文件流会自动关闭
-        EasyExcel.read(fileName, DemoData.class, new DemoDataListener()).sheet().doRead();
+        EasyExcel.read(fileName, DemoData.class, new ModelDataListener()).sheet().doRead();
         // 写法2：
         fileName = "E:\\demo.xlsx";
-        ExcelReader excelReader = EasyExcel.read(fileName, DemoData.class, new DemoDataListener()).build();
+        ExcelReader excelReader = EasyExcel.read(fileName, DemoData.class, new ModelDataListener()).build();
         ReadSheet readSheet = EasyExcel.readSheet(0).build();
         excelReader.read(readSheet);
         // 这里千万别忘记关闭，读的时候会创建临时文件，到时磁盘会崩的
@@ -86,6 +93,12 @@ public class FileUtil {
     }
 
     public static void main(String[] args) {
-        new FileUtil().noModelRead();
+        String fileName = "E:\\demo.xlsx";
+        // 这里 只要，然后读取第一个sheet 同步读取会自动finish
+        EasyExcel.read(fileName, new NoModelDataListener()).sheet().doRead();
+    }
+
+    public static void save(List<Map<Integer, String>> list) {
+        System.out.println(list);
     }
 }
