@@ -91,7 +91,7 @@ public class ListUtil {
                     case "java.lang.Long":
                         return (long) obj1 > (long) obj2 ? (isAsc ? 1 : -1) : (isAsc ? -1 : 1);
                     case "double":
-                    case "java.lang.double":
+                    case "java.lang.Double":
                         return (double) obj1 > (double) obj2 ? (isAsc ? 1 : -1) : (isAsc ? -1 : 1);
                     case "float":
                     case "java.lang.Float":
@@ -139,7 +139,7 @@ public class ListUtil {
             return null;
         }
         //根据属性值进行去重
-        Set<T> sets = new TreeSet<T>((o1, o2) -> {
+        Set<T> sets = new TreeSet<>((o1, o2) -> {
             try {
                 Field field1 = o1.getClass().getDeclaredField(propertyName);
                 Field field2 = o2.getClass().getDeclaredField(propertyName);
@@ -168,7 +168,7 @@ public class ListUtil {
             return null;
         }
         //根据keyName进行去重
-        Set<Map<String, Object>> sets = new TreeSet<Map<String, Object>>((m1, m2) -> {
+        Set<Map<String, Object>> sets = new TreeSet<>((m1, m2) -> {
             Object obj1 = m1.get(keyName);
             Object obj2 = m2.get(keyName);
             return obj1.toString().compareTo(obj2.toString());
