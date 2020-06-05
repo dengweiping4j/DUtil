@@ -1,7 +1,5 @@
 package com.dengweiping.collection;
 
-import com.dengweiping.domain.DemoData;
-
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -141,7 +139,6 @@ public class ListUtil {
             return null;
         }
         //根据属性值进行去重
-        //方式1 使用匿名内部类
         Set<T> sets = new TreeSet<T>((o1, o2) -> {
             try {
                 Field field1 = o1.getClass().getDeclaredField(propertyName);
@@ -150,7 +147,6 @@ public class ListUtil {
                 field2.setAccessible(true);
                 Object obj1 = field1.get(o1);
                 Object obj2 = field2.get(o2);
-                //根据指定属性进行去重
                 return obj1.toString().compareTo(obj2.toString());
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
@@ -164,19 +160,17 @@ public class ListUtil {
     /**
      * 根据指定key去除重复Map
      *
-     * @param list         传入的list集合
+     * @param list    传入的list集合
      * @param keyName 指定的key
      */
     public static List<Map<String, Object>> removeMapRepeat(List<Map<String, Object>> list, String keyName) {
         if (list == null || list.isEmpty()) {
             return null;
         }
-        //根据属性值进行去重
-        //方式1 使用匿名内部类
+        //根据keyName进行去重
         Set<Map<String, Object>> sets = new TreeSet<Map<String, Object>>((m1, m2) -> {
             Object obj1 = m1.get(keyName);
             Object obj2 = m2.get(keyName);
-            //根据指定属性进行去重
             return obj1.toString().compareTo(obj2.toString());
         });
         sets.addAll(list);
